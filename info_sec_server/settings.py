@@ -40,10 +40,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'info_sec_server',
-    'api'
+    'api',
+    'oauth2_provider',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -103,7 +106,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
+CORS_ORIGIN_ALLOW_ALL = True
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
@@ -131,3 +134,5 @@ STATIC_ROOT = '/root/workDir/info_sec/static/'
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_URL='/login/'

@@ -1,15 +1,14 @@
 from django.http import JsonResponse
-
 from django.contrib.auth import authenticate, login, logout
 import json
 
 
 def signin(request):
     # 从 HTTP POST 请求中获取用户名、密码参数
+    print(request.body)
     data = json.loads(request.body)
     username = data.get('username')
     password = data.get('password')
-    print(data)
     # 使用 Django auth 库里面的 方法校验用户名、密码
     user = authenticate(username=username, password=password)
 
@@ -17,6 +16,7 @@ def signin(request):
     if user is not None:
         if user.is_active:
             login(request, user)
+            request.session['username'] = user.get_username()
             if user.is_superuser:
                 request.session['usertype'] = 'administrator'
                 return JsonResponse({'ret': 0, 'usertype': 'administrator'})
@@ -38,6 +38,4 @@ def signout(request):
     return JsonResponse({'ret': 0, 'msg': '用户已登出'})
 
 def userinfo(request):
-    return JsonResponse({
-        'usertype': request.session['usertype']
-    })
+    return JsonResponse({'usertype': request.session.get('usertype') })
