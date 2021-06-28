@@ -18,7 +18,6 @@ from django.urls import path, include, re_path
 from django.conf.urls.static import static
 from django.conf import settings
 from . import views
-from .views import ApiEndpoint
 import oauth2_provider.views as oauth2_views
 from django.conf import settings
 # OAuth2 provider endpoints
@@ -32,27 +31,30 @@ if settings.DEBUG:
     # OAuth2 Application Management endpoints
     oauth2_endpoint_views += [
         path('applications/', oauth2_views.ApplicationList.as_view(), name="list"),
-        path('applications/register/', oauth2_views.ApplicationRegistration.as_view(), name="register"),
-        path('applications/<pk>/', oauth2_views.ApplicationDetail.as_view(), name="detail"),
-        path('applications/<pk>/delete/', oauth2_views.ApplicationDelete.as_view(), name="delete"),
-        path('applications/<pk>/update/', oauth2_views.ApplicationUpdate.as_view(), name="update"),
+        path('applications/register/',
+             oauth2_views.ApplicationRegistration.as_view(), name="register"),
+        path('applications/<pk>/',
+             oauth2_views.ApplicationDetail.as_view(), name="detail"),
+        path('applications/<pk>/delete/',
+             oauth2_views.ApplicationDelete.as_view(), name="delete"),
+        path('applications/<pk>/update/',
+             oauth2_views.ApplicationUpdate.as_view(), name="update"),
     ]
 
     # OAuth2 Token Management endpoints
     oauth2_endpoint_views += [
-        path('authorized-tokens/', oauth2_views.AuthorizedTokensListView.as_view(), name="authorized-token-list"),
+        path('authorized-tokens/', oauth2_views.AuthorizedTokensListView.as_view(),
+             name="authorized-token-list"),
         path('authorized-tokens/<pk>/delete/', oauth2_views.AuthorizedTokenDeleteView.as_view(),
-            name="authorized-token-delete"),
+             name="authorized-token-delete"),
     ]
 
 urlpatterns = [
-    path('api/oauth_query', ApiEndpoint.as_view()),
+    path('api/secret', views.secret_page),
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
-    path("o/", include((oauth2_endpoint_views, 'oauth2_provider.urls'), namespace='oauth2_provider')),
+    path("o/", include((oauth2_endpoint_views, 'oauth2_provider.urls'),
+         namespace='oauth2_provider')),
     path('', views.index),
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + [
-    re_path(r'.', views.index),
-]
-
-print(urlpatterns)
+    path('login', views.index),
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) 

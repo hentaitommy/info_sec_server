@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-z4gy4xnm4rx3is9mhxx-44eelwmwvh4bsul6!i)m-ju#eagfs_'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     '*'
@@ -44,6 +44,11 @@ INSTALLED_APPS = [
     'oauth2_provider',
     'corsheaders',
 ]
+AUTHENTICATION_BACKENDS = [
+    'oauth2_provider.backends.OAuth2Backend',
+    # Uncomment following if you want to access the admin
+    'django.contrib.auth.backends.ModelBackend'
+]
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -54,6 +59,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'oauth2_provider.middleware.OAuth2TokenMiddleware',
 ]
 
 ROOT_URLCONF = 'info_sec_server.urls'
@@ -131,8 +137,6 @@ STATICFILES_DIRS = [
 
 STATIC_ROOT = '/root/workDir/info_sec/static/'
 
-
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_URL='/login/'
+LOGIN_URL='/login'
